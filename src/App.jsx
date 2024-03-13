@@ -6,20 +6,26 @@ import List from './components/List'
 const initialState = {
   items : [
     {
-      text:"ceci est mon texte"
+      text:"ceci est mon texte",
+      id:0
     },
     {
-      text:"ceci est mon autre texte"
+      text:"ceci est mon autre texte",
+      id:1
     },
     {
-      text:"tellement de talent !"
+      text:"encore un autre texte !",
+      id:2
     }
-  ]
+  ],
+  lastId: 2
 }
 
 const removeItem = (arr, id) => {
-  return [...arr.slice(0,id), ...arr.slice(id+1)];
+  const index = arr.findIndex(item => item.id === id);  
+  return [...arr.slice(0,index), ...arr.slice(index+1)];
 }
+
 
 const reducer = (state, action) => {
   console.log(action);
@@ -33,7 +39,8 @@ const reducer = (state, action) => {
       case 'add':
         return {
           ...state,
-          items: [...state.items, {text: action.payload}]
+          items: [...state.items, {text: action.payload, id: state.lastId+1}],
+          lastId : state.lastId + 1
         }
       default:
           return state;
@@ -45,7 +52,7 @@ function App() {
 
   return (
     <>
-      <Input dispatch={dispatch} />
+      <Input dispatch={dispatch} lastId={state.lastId}/>
       <List dispatch={dispatch} items={state.items}/>
     </>
   )
